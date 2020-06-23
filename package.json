@@ -1,0 +1,27 @@
+{
+  "name": "adesso-commuter-server",
+  "version": "1.0.0",
+  "description": "Server for tracking daily commuter status",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "prestart": "npm run compile",
+    "start": "node dist",
+    "test": "jest"
+  },
+  "author": "Philippe Schild",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^12.12.11",
+    "jest": "^25.5.4",
+    "ts-jest": "^25.4.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
+  }
+}
