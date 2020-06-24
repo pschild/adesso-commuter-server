@@ -5,7 +5,8 @@ export class GoogleMapsCrawler {
 
   async crawl(origin: LatLng, destination: LatLng): Promise<number[]> {
     // const browser = await puppeteer.launch({ headless: true });
-    const browser = await puppeteer.launch({ executablePath: process.env.CHROMIUM_PATH, headless: true, args: ['--no-sandbox'] });
+    // const browser = await puppeteer.launch({ executablePath: process.env.CHROMIUM_PATH, headless: true, args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({ executablePath: 'chromium-browser' });
     const page = await browser.newPage();
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
