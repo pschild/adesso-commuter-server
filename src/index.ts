@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Application, Request, Response } from 'express';
 import * as fs from 'fs';
+import { TravelTimeService } from './travel-time.service';
 
 const app: Application = express();
 const port = 9062;
@@ -19,7 +20,14 @@ app.get('/', (req, res) => {
   res.status(200).send(content);
 });
 
-app.post('/enter/:name', (req: Request, res: Response) => {
+app.post('/enter/:name', async (req: Request, res: Response) => {
+  const travelTimeService = new TravelTimeService();
+  const result = await travelTimeService.getDuration(
+    { latitude: ADESSO_ESSEN[0], longitude: ADESSO_ESSEN[1] },
+    { latitude: GOCH[0], longitude: GOCH[1] }
+  );
+  console.log(result);
+
   try {
     writeLog(`ENTER ${req.params.name}`);
   } catch (err) {
