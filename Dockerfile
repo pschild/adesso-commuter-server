@@ -4,9 +4,7 @@ WORKDIR /app
 # copy contents
 COPY . /app
 
-RUN apk add --no-cache udev ttf-freefont chromium
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV CHROMIUM_PATH /usr/bin/chromium-browser
+RUN apt-get install chromium-browser --yes
 
 # install, test and build
 RUN npm install
@@ -18,6 +16,8 @@ RUN npm prune --production
 
 FROM node:13-alpine
 WORKDIR /app
+
+RUN apt-get install chromium-browser --yes
 
 # copy dist/ and node_modules/
 COPY --from=BUILD_IMAGE /app/dist ./dist
