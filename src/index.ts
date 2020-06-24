@@ -3,7 +3,7 @@ import { Application, Request, Response } from 'express';
 import * as fs from 'fs';
 
 const app: Application = express();
-const port = 9046;
+const port = 9062;
 
 const ADESSO_ESSEN = [51.4557381, 7.0101814];
 const UNI_ESSEN = [51.4649085, 7.0014287];
