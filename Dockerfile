@@ -4,6 +4,10 @@ WORKDIR /app
 # copy contents
 COPY . /app
 
+RUN apk add --no-cache udev ttf-freefont chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
+
 # install, test and build
 RUN npm install
 RUN npm test
