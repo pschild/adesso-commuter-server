@@ -4,7 +4,7 @@ WORKDIR /app
 # copy contents
 COPY . /app
 
-RUN apk add chromium --yes
+RUN apk add chromium
 
 # install, test and build
 RUN npm install
@@ -17,7 +17,7 @@ RUN npm prune --production
 FROM node:13-alpine
 WORKDIR /app
 
-RUN apk add chromium --yes
+RUN apk add chromium
 
 # copy dist/ and node_modules/
 COPY --from=BUILD_IMAGE /app/dist ./dist
