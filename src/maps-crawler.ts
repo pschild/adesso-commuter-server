@@ -4,7 +4,8 @@ import { LatLng } from './travel-time.service';
 export class GoogleMapsCrawler {
 
   async crawl(origin: LatLng, destination: LatLng): Promise<number[]> {
-    const browser = await puppeteer.launch({ headless: true });
+    // const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ executablePath: 'chromium-browser', headless: true });
     const page = await browser.newPage();
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
