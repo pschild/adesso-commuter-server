@@ -1,10 +1,13 @@
 import * as express from 'express';
 import { Application, Request, Response } from 'express';
 import * as fs from 'fs';
+import * as path from 'path';
 import { TravelTimeService } from './travel-time.service';
 
 const app: Application = express();
 const port = 9062;
+
+app.use(express.static(path.join(__dirname)));
 
 const ADESSO_ESSEN = [51.4557381, 7.0101814];
 const UNI_ESSEN = [51.4649085, 7.0014287];
@@ -18,6 +21,10 @@ const GOCH = [51.668189, 6.148282];
 app.get('/', (req, res) => {
   const content = fs.readFileSync('history.log');
   res.status(200).send(content);
+});
+
+app.get('/screenshot', (req, res) => {
+  res.status(200).sendFile('maps.png', { root: __dirname + '/..' });
 });
 
 app.post('/enter/:name', async (req: Request, res: Response) => {

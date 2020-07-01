@@ -4,14 +4,13 @@ import { LatLng } from './travel-time.service';
 export class GoogleMapsCrawler {
 
   async crawl(origin: LatLng, destination: LatLng): Promise<number[]> {
-    // const browser = await puppeteer.launch({ headless: true });
-    // const browser = await puppeteer.launch({ executablePath: process.env.CHROMIUM_PATH, headless: true, args: ['--no-sandbox'] });
     const browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
     );
-    // await page.screenshot({ path: 'example.png' });
+    await page.waitFor('.section-directions-trip');
+    await page.screenshot({ path: 'maps.png' });
     const durationsForCar = await page.evaluate(() => {
       const drivePossibilities = document.querySelectorAll('.section-directions-trip-travel-mode-icon.drive');
       const allDurations = [];
