@@ -4,10 +4,8 @@ WORKDIR /app
 # copy contents
 COPY . /app
 
-RUN apk add chromium
-
 # install, test and build
-RUN npm install
+RUN export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm install
 RUN npm test
 RUN npm run compile
 
@@ -17,7 +15,7 @@ RUN npm prune --production
 FROM node:13-alpine
 WORKDIR /app
 
-RUN apk add chromium
+RUN apk update && apk add chromium
 
 # copy dist/ and node_modules/
 COPY --from=BUILD_IMAGE /app/dist ./dist
