@@ -29,18 +29,22 @@ app.get('/screenshot', (req, res) => {
 
 app.post('/enter/:name', async (req: Request, res: Response) => {
   const travelTimeService = new TravelTimeService();
-  const result = await travelTimeService.getDuration(
+  const durations = await travelTimeService.getDurations(
     { latitude: ADESSO_ESSEN[0], longitude: ADESSO_ESSEN[1] },
     { latitude: GOCH[0], longitude: GOCH[1] }
   );
-  console.log(result);
 
   try {
-    writeLog(`ENTER ${req.params.name}`);
+    writeLog(`ENTER ${req.params.name}, durations=${durations.join(',')}`);
   } catch (err) {
     return res.status(500).send(err);
   }
-  res.status(200).end();
+  res.status(200).json({
+    durations,
+    average: durations.reduce((prev, curr) => prev + curr) / durations.length,
+    min: Math.min(...durations),
+    max: Math.max(...durations)
+  });
 });
 
 app.post('/exit/:name', (req: Request, res: Response) => {

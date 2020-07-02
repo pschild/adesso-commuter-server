@@ -4,7 +4,11 @@ import { LatLng } from './travel-time.service';
 export class GoogleMapsCrawler {
 
   async crawl(origin: LatLng, destination: LatLng): Promise<number[]> {
+    // Raspberry Pi
     const browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox'] });
+    // Windows
+    // const browser = await puppeteer.launch({ headless: true });
+
     const page = await browser.newPage();
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
