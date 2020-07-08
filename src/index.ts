@@ -56,6 +56,15 @@ app.post('/exit/:name', (req: Request, res: Response) => {
   res.status(200).end();
 });
 
+app.post('/logfromandroid/:lat/:lng', (req: Request, res: Response) => {
+  try {
+    writeLog(`ANDROID [${req.params.lat}, ${req.params.lng}]`);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+  res.status(200).end();
+});
+
 app.listen(port, () => {
   console.log(`running at http://localhost:${port}`);
 });
