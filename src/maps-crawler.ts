@@ -31,8 +31,8 @@ export class GoogleMapsCrawler {
   }
 
   private parseDuration(rawDuration: string): number {
-    const hours = rawDuration.match(/\d+(?= Std.)/g);
-    const mins = rawDuration.match(/\d+(?= Min.)/g);
+    const hours = rawDuration.match(/\d+(?= (Std.|h))/g);
+    const mins = rawDuration.match(/\d+(?= (Min.|min))/g);
 
     let duration = 0;
     if (hours) {
