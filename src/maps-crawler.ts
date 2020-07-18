@@ -10,21 +10,27 @@ export class GoogleMapsCrawler {
     // const browser = await puppeteer.launch({ headless: true });
 
     const page = await browser.newPage();
+    console.log('Go to page ...');
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
     );
+    console.log('Wait for selector ...');
     await page.waitFor('.section-directions-trip');
+    console.log('Saving screenshot ...');
     await page.screenshot({ path: 'maps.png' });
+    console.log('Evaluating page ...');
     const durationsForCar = await page.evaluate(() => {
-      const drivePossibilities = document.querySelectorAll('.section-directions-trip-travel-mode-icon.drive');
+      const drivePossibilities = document.querySelectorAll('.section-directions-trip-travel-mode-icon');
       const allDurations = [];
       [].forEach.call(drivePossibilities, el => {
         const duration = el.parentNode.querySelector('.section-directions-trip-duration > span:first-child').textContent;
         allDurations.push(duration);
       });
+      console.log(`Found ${allDurations.length} durations`);
       return allDurations;
     });
 
+    console.log('Closing browser ...');
     await browser.close();
 
     return durationsForCar.map(time => this.parseDuration(time));
