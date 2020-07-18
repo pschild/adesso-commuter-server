@@ -39,6 +39,11 @@ app.post('/enter/:name', async (req: Request, res: Response) => {
   } catch (err) {
     return res.status(500).send(err);
   }
+  
+  if (!durations || !durations.length) {
+      res.status(200).json({ message: 'No durations could be found.' });
+  }
+  
   res.status(200).json({
     durations,
     average: durations.reduce((prev, curr) => prev + curr) / durations.length,
