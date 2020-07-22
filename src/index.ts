@@ -67,7 +67,7 @@ app.post('/logfromandroid/:lat/:lng', (req: Request, res: Response) => {
   } catch (err) {
     return res.status(500).send(err);
   }
-  res.status(200).end();
+  res.status(200).json({ success: true });
 });
 
 app.listen(port, () => {
