@@ -10,6 +10,14 @@ export class GoogleMapsCrawler {
     // const browser = await puppeteer.launch({ headless: true });
 
     const page = await browser.newPage();
+    
+    // pass logs within headless browser to main console
+    page.on('console', consoleObj => {
+      if (consoleObj.type() === 'log') {
+        console.log(consoleObj.text());
+      }
+    });
+    
     console.log('Go to page ...');
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
