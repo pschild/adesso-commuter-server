@@ -21,10 +21,17 @@ export class GoogleMapsCrawler {
     console.log('Evaluating page ...');
     const durationsForCar = await page.evaluate(() => {
       const drivePossibilities = document.querySelectorAll('.section-directions-trip-travel-mode-icon');
+      console.log(`Found ${drivePossibilities.length} travel-mode-icons`);
       const allDurations = [];
       [].forEach.call(drivePossibilities, el => {
-        const duration = el.parentNode.querySelector('.section-directions-trip-duration > span:first-child').textContent;
-        allDurations.push(duration);
+        const durationContainer = el.parentNode.querySelector('.section-directions-trip-duration > span:first-child');
+        if (durationContainer) {
+          console.log(`Found durationContainer`);
+          const duration = durationContainer.textContent;
+          allDurations.push(duration);
+        } else {
+          console.log(`Did NOT found durationContainer!`); 
+        }
       });
       console.log(`Found ${allDurations.length} durations`);
       return allDurations;
