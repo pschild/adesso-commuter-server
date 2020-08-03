@@ -27,6 +27,33 @@ app.get('/screenshot', (req, res) => {
   res.status(200).sendFile('maps.png', { root: __dirname + '/..' });
 });
 
+app.get('/from/:latLngFrom/to/:latLngTo', async (req: Request, res: Response) => {
+  const travelTimeService = new TravelTimeService();
+  const fromParts = req.params.latLngFrom.split(',');
+  const toParts = req.params.latLngTo.split(',');
+  const durations = await travelTimeService.getDurations(
+    { latitude: +fromParts[0], longitude: +fromParts[1] },
+    { latitude: +toParts[0], longitude: +toParts[1] }
+  );
+
+  try {
+    writeLog(`from ${req.params.latLngFrom} to ${req.params.latLngTo}, durations=${durations.join(',')}`);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+
+  if (!durations || !durations.length) {
+    res.status(200).json({ message: 'No durations could be found.' });
+  }
+
+  res.status(200).json({
+    durations,
+    average: durations.reduce((prev, curr) => prev + curr) / durations.length,
+    min: Math.min(...durations),
+    max: Math.max(...durations)
+  });
+});
+
 app.post('/enter/:name', async (req: Request, res: Response) => {
   const travelTimeService = new TravelTimeService();
   const durations = await travelTimeService.getDurations(
@@ -39,11 +66,11 @@ app.post('/enter/:name', async (req: Request, res: Response) => {
   } catch (err) {
     return res.status(500).send(err);
   }
-  
+
   if (!durations || !durations.length) {
-      res.status(200).json({ message: 'No durations could be found.' });
+    res.status(200).json({ message: 'No durations could be found.' });
   }
-  
+
   res.status(200).json({
     durations,
     average: durations.reduce((prev, curr) => prev + curr) / durations.length,
