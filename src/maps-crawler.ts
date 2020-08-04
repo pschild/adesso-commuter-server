@@ -1,13 +1,22 @@
 import * as puppeteer from 'puppeteer';
 import { LatLng } from './travel-time.service';
+import * as path from 'path';
 
 export class GoogleMapsCrawler {
 
   async crawl(origin: LatLng, destination: LatLng): Promise<number[]> {
     // Raspberry Pi
-    const browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({
+      executablePath: '/usr/bin/chromium-browser',
+      args: ['--no-sandbox'],
+      headless: true,
+      defaultViewport: { width: 1024, height: 768 }
+    });
     // Windows
-    // const browser = await puppeteer.launch({ headless: true });
+    // const browser = await puppeteer.launch({
+    //   headless: true,
+    //   defaultViewport: { width: 1024, height: 768 }
+    // });
 
     const page = await browser.newPage();
 
@@ -25,7 +34,10 @@ export class GoogleMapsCrawler {
     console.log('Wait for selector ...');
     await page.waitFor('.section-directions-trip');
     console.log('Saving screenshot ...');
-    await page.screenshot({ path: 'maps.png' });
+    await page.screenshot({
+      path: path.join('screenshots', `maps-${new Date().toISOString().replace(/[:\.]/g, '-')}.png`),
+      clip: { x: 435, y: 50, width: 1024 - 435, height: 768 - 50 * 2 }
+    });
     console.log('Evaluating page ...');
     const durationsForCar = await page.evaluate(() => {
       const drivePossibilities = document.querySelectorAll('.section-directions-trip-travel-mode-icon');

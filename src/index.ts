@@ -3,11 +3,13 @@ import { Application, Request, Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { TravelTimeService } from './travel-time.service';
+import * as serveIndex from 'serve-index';
 
 const app: Application = express();
 const port = 9062;
 
-app.use(express.static(path.join(__dirname)));
+const screenshotsFolderPath = path.join(__dirname, '..', 'screenshots');
+app.use('/screenshots', express.static(screenshotsFolderPath), serveIndex(screenshotsFolderPath));
 
 const ADESSO_ESSEN = [51.4557381, 7.0101814];
 const UNI_ESSEN = [51.4649085, 7.0014287];
