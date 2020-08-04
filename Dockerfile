@@ -17,9 +17,10 @@ WORKDIR /app
 
 RUN apk update && apk add chromium
 
-# copy dist/ and node_modules/
+# copy necessary folders
 COPY --from=BUILD_IMAGE /app/dist ./dist
 COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
+COPY --from=BUILD_IMAGE /app/screenshots ./screenshots
 
 # run
 CMD [ "node", "./dist" ]
