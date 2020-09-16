@@ -34,10 +34,12 @@ export class GoogleMapsCrawler {
     await page.goto(
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
     );
-    console.log('Wait for selector ...');
+    console.log('Wait for travel modes visible ...');
     await page.waitFor('.directions-travel-mode-selector');
     console.log('Click icon for choosing "drive" as travel mode ...');
     await page.click('.travel-mode:nth-child(2) button');
+    console.log('Wait for trips visible ...');
+    await page.waitFor('.section-directions-trip');
     console.log('Saving screenshot ...');
     await page.screenshot({
       path: path.join('screenshots', `maps-${new Date().toISOString().replace(/[:\.]/g, '-')}.png`),
