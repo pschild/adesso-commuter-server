@@ -35,12 +35,14 @@ export class GoogleMapsCrawler {
       `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
     );
     console.log('Wait for selector ...');
-    await page.waitFor('.section-directions-trip');
+    await page.waitFor('.directions-travel-mode-selector');
+    console.log('Click icon for choosing "drive" as travel mode ...');
+    await page.click('.travel-mode:nth-child(2) button');
     console.log('Saving screenshot ...');
     await page.screenshot({
       path: path.join('screenshots', `maps-${new Date().toISOString().replace(/[:\.]/g, '-')}.png`),
       // clip: { x: 435, y: 50, width: 1024 - 435, height: 768 - 50 * 2 }
-      clip: { x: 435, y: 0, width: 1024 - 435, height: 768 }
+      // clip: { x: 435, y: 0, width: 1024 - 435, height: 768 }
     });
     console.log('Evaluating page ...');
     const durationsForCar = await page.evaluate(() => {
