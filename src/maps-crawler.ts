@@ -38,8 +38,8 @@ export class GoogleMapsCrawler {
     await page.waitFor('.directions-travel-mode-selector');
     console.log('Click icon for choosing "drive" as travel mode ...');
     await page.click('.travel-mode:nth-child(2) button');
-    console.log('Wait 2s ...');
-    await page.waitFor(2000);
+    // console.log('Wait 2s ...');
+    // await page.waitFor(2000);
     console.log('Wait for trips visible ...');
     await page.waitFor('.section-directions-trip');
     console.log('Saving screenshot ...');
