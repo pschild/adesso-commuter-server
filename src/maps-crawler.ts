@@ -30,14 +30,14 @@ export class GoogleMapsCrawler {
     });
 
     console.log('Go to page ...');
-    // Example: https://www.google.de/maps/dir/51.5045685,6.9971393/51.668189,6.148282
+    // Example: https://www.google.de/maps/dir/51.5045685,6.9971393/51.668189,6.148282/data=!3m1!4b1!4m2!4m1!3e0
     await page.goto(
-      `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}`
+      `https://www.google.de/maps/dir/${origin.latitude},${origin.longitude}/${destination.latitude},${destination.longitude}/data=!3m1!4b1!4m2!4m1!3e0`
     );
-    console.log('Wait for travel modes visible ...');
-    await page.waitFor('.directions-travel-mode-selector');
-    console.log('Click icon for choosing "drive" as travel mode ...');
-    await page.click('.travel-mode:nth-child(2) button');
+    // console.log('Wait for travel modes visible ...');
+    // await page.waitFor('.directions-travel-mode-selector');
+    // console.log('Click icon for choosing "drive" as travel mode ...');
+    // await page.click('.travel-mode:nth-child(2) button');
     // console.log('Wait 2s ...');
     // await page.waitFor(2000);
     console.log('Wait for trips visible ...');
