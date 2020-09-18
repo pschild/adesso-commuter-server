@@ -12,6 +12,7 @@
   "author": "Philippe Schild",
   "license": "MIT",
   "dependencies": {
+    "async-mqtt": "^2.6.1",
     "detect-rpi": "^1.4.0",
     "express": "^4.17.1",
     "puppeteer": "^4.0.0",

@@ -4,9 +4,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { TravelTimeService } from './travel-time.service';
 import * as serveIndex from 'serve-index';
+import * as mqtt from 'async-mqtt';
 
 const app: Application = express();
 const port = 9062;
+
+const mqttClient = mqtt.connect('http://192.168.178.28:1883');
 
 const screenshotsFolderPath = path.join(__dirname, '..', 'screenshots');
 app.use('/screenshots', express.static(screenshotsFolderPath), serveIndex(screenshotsFolderPath));
@@ -16,7 +19,9 @@ app.get('/history', (req, res) => {
   res.status(200).send(content);
 });
 
-app.get('/screenshot', (req, res) => {
+app.get('/screenshot', async (req, res) => {
+  await mqttClient.publish('wow/so/cool', 'It works!');
+
   const sortedScreenshots = fs.readdirSync(path.join(__dirname, '..', 'screenshots'))
     .map(file => ({ file, stats: fs.lstatSync(path.join(__dirname, '..', 'screenshots', file)) }))
     .filter(fileWithStats => fileWithStats.stats.isFile() && fileWithStats.file.match(/^maps-/) !== null)
@@ -64,8 +69,11 @@ app.post('/logfromandroid/:lat/:lng', (req: Request, res: Response) => {
   res.status(200).json({ success: true });
 });
 
-app.listen(port, () => {
-  console.log(`running at http://localhost:${port}`);
+mqttClient.on('connect', () => {
+  console.log(`connected with MQTT broker`);
+  app.listen(port, () => {
+    console.log(`running at http://localhost:${port}`);
+  });
 });
 
 const writeLog = (msg: string) => {
