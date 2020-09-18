@@ -19,9 +19,7 @@ app.get('/history', (req, res) => {
   res.status(200).send(content);
 });
 
-app.get('/screenshot', async (req, res) => {
-  await mqttClient.publish('wow/so/cool', 'It works!');
-
+app.get('/screenshot', (req, res) => {
   const sortedScreenshots = fs.readdirSync(path.join(__dirname, '..', 'screenshots'))
     .map(file => ({ file, stats: fs.lstatSync(path.join(__dirname, '..', 'screenshots', file)) }))
     .filter(fileWithStats => fileWithStats.stats.isFile() && fileWithStats.file.match(/^maps-/) !== null)
@@ -49,9 +47,10 @@ app.get('/from/:latLngFrom/to/:latLngTo', async (req: Request, res: Response) =>
   }
 
   if (!durations || !durations.length) {
-    res.status(200).json({ message: 'No durations could be found.' });
+    return res.status(200).json({ message: 'No durations could be found.' });
   }
 
+  await mqttClient.publish('adesso-commuter-server/commuting/duration', `${Math.min(...durations)}m`);
   res.status(200).json({
     durations,
     average: durations.reduce((prev, curr) => prev + curr) / durations.length,
