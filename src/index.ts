@@ -59,6 +59,12 @@ app.get('/from/:latLngFrom/to/:latLngTo', async (req: Request, res: Response) =>
   });
 });
 
+app.get('/commuting-state/:state', async (req: Request, res: Response) => {
+  const newState = req.params.state;
+  await mqttClient.publish('adesso-commuter-server/commuting/status', newState);
+  res.status(200).json({ newState });
+});
+
 app.post('/logfromandroid/:lat/:lng', (req: Request, res: Response) => {
   try {
     writeLog(`ANDROID [${req.params.lat}, ${req.params.lng}]`);
