@@ -5,6 +5,7 @@ import * as path from 'path';
 import { TravelTimeService } from './travel-time.service';
 import * as serveIndex from 'serve-index';
 import * as mqtt from 'async-mqtt';
+import { format, add } from 'date-fns';
 
 const app: Application = express();
 const port = 9062;
@@ -50,7 +51,9 @@ app.get('/from/:latLngFrom/to/:latLngTo', async (req: Request, res: Response) =>
     return res.status(200).json({ message: 'No durations could be found.' });
   }
 
-  await mqttClient.publish('adesso-commuter-server/commuting/duration', `${Math.min(...durations)}m`);
+  const minutesLeft = Math.min(...durations);
+  await mqttClient.publish('adesso-commuter-server/commuting/duration/minutes-left', minutesLeft.toString());
+  await mqttClient.publish('adesso-commuter-server/commuting/duration/eta', format(add(new Date(), { minutes: minutesLeft }), 'HH:mm'));
   res.status(200).json({
     durations,
     average: durations.reduce((prev, curr) => prev + curr) / durations.length,
@@ -62,6 +65,12 @@ app.get('/from/:latLngFrom/to/:latLngTo', async (req: Request, res: Response) =>
 app.get('/commuting-state/:state', async (req: Request, res: Response) => {
   const newState = req.params.state;
   await mqttClient.publish('adesso-commuter-server/commuting/status', newState);
+
+  if (newState === 'START') {
+    await mqttClient.publish('adesso-commuter-server/commuting/status/start', format(new Date(), 'HH:mm'));
+  } else if (newState === 'END') {
+    await mqttClient.publish('adesso-commuter-server/commuting/status/end', format(new Date(), 'HH:mm'));
+  }
   res.status(200).json({ newState });
 });
 
