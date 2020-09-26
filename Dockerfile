@@ -15,7 +15,7 @@ RUN npm prune --production
 FROM node:13-alpine
 WORKDIR /app
 
-RUN apk update && apk add chromium
+RUN apk update && apk add chromium tzdata
 
 # copy necessary folders
 COPY --from=BUILD_IMAGE /app/dist ./dist
@@ -23,5 +23,7 @@ COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 COPY --from=BUILD_IMAGE /app/screenshots ./screenshots
 
 # run
+ENV TZ=Europe/Berlin
+
 CMD [ "node", "./dist" ]
 EXPOSE 9062
