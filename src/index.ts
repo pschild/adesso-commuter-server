@@ -11,7 +11,7 @@ import { log } from './utils';
 const app: Application = express();
 const port = 9062;
 
-const mqttClient = mqtt.connect('http://192.168.178.28:1883', { clientId: 'adesso-commuter-server' });
+const mqttClient = mqtt.connect('http://esp-mqtt-broker:1883', { clientId: 'adesso-commuter-server' });
 
 const screenshotsFolderPath = path.join(__dirname, '..', 'screenshots');
 app.use('/screenshots', express.static(screenshotsFolderPath), serveIndex(screenshotsFolderPath));
