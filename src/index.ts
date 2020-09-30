@@ -6,11 +6,12 @@ import { TravelTimeService } from './travel-time.service';
 import * as serveIndex from 'serve-index';
 import * as mqtt from 'async-mqtt';
 import { format, add } from 'date-fns';
+import { log } from './utils';
 
 const app: Application = express();
 const port = 9062;
 
-const mqttClient = mqtt.connect('http://192.168.178.28:1883');
+const mqttClient = mqtt.connect('http://192.168.178.28:1883', { clientId: 'adesso-commuter-server' });
 
 const screenshotsFolderPath = path.join(__dirname, '..', 'screenshots');
 app.use('/screenshots', express.static(screenshotsFolderPath), serveIndex(screenshotsFolderPath));
@@ -84,9 +85,9 @@ app.post('/logfromandroid/:lat/:lng', (req: Request, res: Response) => {
 });
 
 mqttClient.on('connect', () => {
-  console.log(`connected with MQTT broker`);
+  log(`connected with MQTT broker`);
   app.listen(port, () => {
-    console.log(`running at http://localhost:${port}`);
+    log(`running at http://localhost:${port}`);
   });
 });
 
