@@ -52,19 +52,19 @@ export class GoogleMapsCrawler {
     log('Evaluating page ...');
     const durationsForCar = await page.evaluate(() => {
       const drivePossibilities = document.querySelectorAll('.section-directions-trip-travel-mode-icon');
-      log(`Found ${drivePossibilities.length} travel-mode-icons`);
+      console.log(`Found ${drivePossibilities.length} travel-mode-icons`);
       const allDurations = [];
       [].forEach.call(drivePossibilities, el => {
         const durationContainer = el.parentNode.querySelector('.section-directions-trip-duration > span:first-child');
         if (durationContainer) {
-          log(`Found durationContainer`);
+          console.log(`Found durationContainer`);
           const duration = durationContainer.textContent;
           allDurations.push(duration);
         } else {
-          log(`Did NOT found durationContainer!`);
+          console.log(`Did NOT found durationContainer!`);
         }
       });
-      log(`Found ${allDurations.length} durations`);
+      console.log(`Found ${allDurations.length} durations`);
       return allDurations;
     });
 
