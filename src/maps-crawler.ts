@@ -58,7 +58,7 @@ export class GoogleMapsCrawler {
         const durationContainer = el.parentNode.querySelector('.section-directions-trip-duration > span:first-child');
         if (durationContainer) {
           console.log(`Found durationContainer`);
-          const duration = durationContainer.textContent;
+          const duration = durationContainer.textContent.replace('&nbsp;', ' ');
           allDurations.push(duration);
         } else {
           console.log(`Did NOT found durationContainer!`);
