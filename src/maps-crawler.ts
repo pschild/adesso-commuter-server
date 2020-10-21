@@ -58,7 +58,7 @@ export class GoogleMapsCrawler {
         const durationContainer = el.parentNode.querySelector('.section-directions-trip-duration > span:first-child');
         if (durationContainer) {
           console.log(`Found durationContainer`);
-          const duration = durationContainer.textContent.replace('&nbsp;', ' ');
+          const duration = durationContainer.textContent;
           allDurations.push(duration);
         } else {
           console.log(`Did NOT found durationContainer!`);
@@ -75,8 +75,10 @@ export class GoogleMapsCrawler {
   }
 
   private parseDuration(rawDuration: string): number {
-    const hours = rawDuration.match(/\d+(?= (Std.|h))/g);
-    const mins = rawDuration.match(/\d+(?= (Min.|min))/g);
+    // Attention! (?= (Std.|h)) does not work as lookahead, as we cannot be sure if a normal space or a "different kind" of space (?) is in front of "Std." or "h".
+    // So we need to match for a single character with . instead...
+    const hours = rawDuration.match(/\d+(?=.(Std.|h))/g);
+    const mins = rawDuration.match(/\d+(?=.(Min.|min))/g);
 
     let duration = 0;
     if (hours) {
